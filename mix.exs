@@ -28,9 +28,6 @@ defmodule Datex.MixProject do
 
     You can get a specific day, date, add days to date and get results which are friendly and easy to understand.
 
-    Compare dates and time, obtain results in formats you want to use. Convert any date, time formats to elixir formats and vice-versa.
-
-    Get current date, yesterday, tommmorow with or without time zones(utc by default).
     """
   end
 
