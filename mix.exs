@@ -9,7 +9,7 @@ defmodule Datex.MixProject do
       start_permanent: Mix.env() == :prod,
       package: package(),
       description: description(),
-      deps: deps()
+      # deps: deps()
     ]
   end
 
@@ -40,9 +40,9 @@ defmodule Datex.MixProject do
   end
 
   # Run "mix help deps" to learn about dependencies.
-  defp deps do
-    [
-      {:ex_doc, "~> 0.19.1"}
-    ]
-  end
+  # defp deps do
+  #   [
+  #     {:ex_doc, "~> 0.19.1"}
+  #   ]
+  # end
 end
