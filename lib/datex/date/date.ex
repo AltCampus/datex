@@ -1,31 +1,155 @@
 defmodule Datex.Date do
-
   alias Datex.Timezones
 
-  @months_short_name %{1 => "Jan", 2 => "Feb", 3 => "Mar", 4 => "Apr", 5 => "May", 6 => "June", 7 => "July", 8 => "Aug", 9 => "Sept", 10 => "Oct", 11 => "Nov", 12 => "Dec"}
+  @months_short_name %{
+    1 => "Jan",
+    2 => "Feb",
+    3 => "Mar",
+    4 => "Apr",
+    5 => "May",
+    6 => "June",
+    7 => "July",
+    8 => "Aug",
+    9 => "Sept",
+    10 => "Oct",
+    11 => "Nov",
+    12 => "Dec"
+  }
 
-  @months %{1 => "January", 2 => "February", 3 => "March", 4 => "April", 5 => "May", 6 => "June", 7 => "July", 8 => "August", 9 => "September", 10 => "October", 11 => "November", 12 => "December"}
+  @months %{
+    1 => "January",
+    2 => "February",
+    3 => "March",
+    4 => "April",
+    5 => "May",
+    6 => "June",
+    7 => "July",
+    8 => "August",
+    9 => "September",
+    10 => "October",
+    11 => "November",
+    12 => "December"
+  }
 
-  @months_number %{"Jan" => 1, "jan" => 1, "January" => 1, "january" => 1, "Feb" => 2, "feb" => 2, "february" => 2, "February" => 2, "Mar" => 3, "mar" => 3, "March" => 3, "march" => 3, "Apr" => 4, "apr" => 4, "april" => 4, "April" => 4, "may" => 5, "May" => 5, "June" => 6, "june" => 6, "jun" => 6, "Jun" => 6, "Jul" => 7, "jul" => 7, "july" => 7, "July" => 7, "Aug" => 8, "aug" => 8, "August" => 8, "august" => 8, "Sep" => 9, "sep" => 9, "Sept" => 9, "sept" => 9, "September" => 9, "september" => 9, "Oct" => 10, "oct" => 10, "October" => 10, "october" => 10, "Nov" => 11, "nov" => 11, "November" => 11, "november" => 11, "Dec" => 12, "dec" => 12, "December" => 12, "december" => 12}
+  @months_number %{
+    "Jan" => 1,
+    "jan" => 1,
+    "January" => 1,
+    "january" => 1,
+    "Feb" => 2,
+    "feb" => 2,
+    "february" => 2,
+    "February" => 2,
+    "Mar" => 3,
+    "mar" => 3,
+    "March" => 3,
+    "march" => 3,
+    "Apr" => 4,
+    "apr" => 4,
+    "april" => 4,
+    "April" => 4,
+    "may" => 5,
+    "May" => 5,
+    "June" => 6,
+    "june" => 6,
+    "jun" => 6,
+    "Jun" => 6,
+    "Jul" => 7,
+    "jul" => 7,
+    "july" => 7,
+    "July" => 7,
+    "Aug" => 8,
+    "aug" => 8,
+    "August" => 8,
+    "august" => 8,
+    "Sep" => 9,
+    "sep" => 9,
+    "Sept" => 9,
+    "sept" => 9,
+    "September" => 9,
+    "september" => 9,
+    "Oct" => 10,
+    "oct" => 10,
+    "October" => 10,
+    "october" => 10,
+    "Nov" => 11,
+    "nov" => 11,
+    "November" => 11,
+    "november" => 11,
+    "Dec" => 12,
+    "dec" => 12,
+    "December" => 12,
+    "december" => 12
+  }
 
-  @days %{1 => "Monday", 2 => "Tuesday", 3 => "Wednesday", 4 => "Thursday", 5 => "Friday", 6 => "Saturday", 7 => "Sunday"}
+  @days %{
+    1 => "Monday",
+    2 => "Tuesday",
+    3 => "Wednesday",
+    4 => "Thursday",
+    5 => "Friday",
+    6 => "Saturday",
+    7 => "Sunday"
+  }
 
-  @days_short_name %{1 => "Mon", 2 => "Tue", 3 => "Wed", 4 => "Thu", 5 => "Fri", 6 => "Sat", 7 => "Sun"}
+  @days_short_name %{
+    1 => "Mon",
+    2 => "Tue",
+    3 => "Wed",
+    4 => "Thu",
+    5 => "Fri",
+    6 => "Sat",
+    7 => "Sun"
+  }
 
-	
-	@moduledoc """
+  @days_number %{
+    "Monday" => 1,
+    "monday" => 1,
+    "Mon" => 1,
+    "mon" => 1,
+    "Tuesday" => 2,
+    "tuesday" => 2,
+    "Tue" => 2,
+    "tue" => 2,
+    "Wednesday" => 3,
+    "wednesday" => 3,
+    "Wed" => 3,
+    "wed" => 3,
+    "Thursday" => 4,
+    "thursday" => 4,
+    "Thu" => 4,
+    "thu" => 4,
+    "Friday" => 5,
+    "friday" => 5,
+    "Fri" => 5,
+    "fri" => 5,
+    "Saturday" => 6,
+    "saturday" => 6,
+    "Sat" => 6,
+    "sat" => 6,
+    "Sunday" => 7,
+    "sunday" => 7,
+    "Sun" => 7,
+    "sun" => 7
+  }
+
+  @moduledoc """
   Date provides simple date formats to work with and manipulate any date formats to either elixir or any nicer looking dates.
   """
 
+  # ============================================================================
+  # PUBLIC FUNCTIONS
+  # ============================================================================
+
   @doc """
-  Get current date with or without time zone. 
+  Get current date with or without time zone.
 
   It takes 2 optional parameters i.e, `time_zone` as first params and `format` as second.
   Without any params ie today/0 will return utc_date in a nicer format.
 
   today/1 will need a time_zone which is specified in timezones.
 
-  For a different format other than `:nice_date` like `:elixir` or `:nice_short_date`, 
+  For a different format other than `:nice_date` like `:elixir` or `:nice_short_date`,
   You need to specify first argument along with format as second argument. Pass `:utc` as first argument for default.
 
   ## Examples
@@ -43,38 +167,39 @@ defmodule Datex.Date do
       "15 Sept, 2018"
 
   """
-
   def today(time_zone \\ :utc, format \\ :nice_date) do
     utc_date = Date.utc_today()
 
     case time_zone do
-      :utc -> utc_date |> show_date(format)
-      _ -> 
+      :utc ->
+        utc_date |> show_date(format)
+
+      _ ->
         naive_to_date(time_zone)
         |> show_date(format)
     end
   end
 
   @doc """
-  Get tomorrow's date with or without time zone in similar syntax as today. 
+  Get tomorrow's date with or without time zone in similar syntax as today.
 
   ## Examples
 
       iex()> Datex.Date.tomorrow()
       "16 September, 2018"
-      
+
       iex()> Datex.Date.tomorrow("Asia/Calcutta", :elixir)
       ~D[2018-09-16]
 
   """
-
   def tomorrow(time_zone \\ :utc, format \\ :nice_date) do
     case time_zone do
-      :utc -> 
+      :utc ->
         Date.utc_today()
         |> Date.add(1)
         |> show_date(format)
-      _ -> 
+
+      _ ->
         naive_to_date(time_zone)
         |> Date.add(1)
         |> show_date(format)
@@ -82,25 +207,25 @@ defmodule Datex.Date do
   end
 
   @doc """
-  Get yesterday's date with or without time zone in similar syntax as today/tomorrow. 
+  Get yesterday's date with or without time zone in similar syntax as today/tomorrow.
 
   ## Examples
 
       iex()> Datex.Date.yesterday()
       "14 September, 2018"
-      
+
       iex(4)> Datex.Date.yesterday("Asia/Calcutta", :nice_short_date)
       "14 Sept, 2018"
 
   """
-
   def yesterday(time_zone \\ :utc, format \\ :nice_date) do
     case time_zone do
-      :utc -> 
+      :utc ->
         Date.utc_today()
         |> Date.add(-1)
         |> show_date(format)
-      _ -> 
+
+      _ ->
         naive_to_date(time_zone)
         |> Date.add(-1)
         |> show_date(format)
@@ -108,16 +233,16 @@ defmodule Datex.Date do
   end
 
   @doc """
-  Get day as `String` for a particular date in any format. 
+  Get day as `String` for a particular date in any format.
 
-  For example date formats like `DD-MM-YYYY`, `10th Oct, 2019`, `YYYY-MM-DD`, 
-  `DD/MM/YYYY`, `DD.MM.YYYY` or even elixir dates. 
+  For example date formats like `DD-MM-YYYY`, `10th Oct, 2019`, `YYYY-MM-DD`,
+  `DD/MM/YYYY`, `DD.MM.YYYY` or even elixir dates.
 
   ## Examples
 
       iex()> Datex.Date.day("12 Sept, 2017")
       "Tuesday"
-      
+
       iex()> Datex.Date.day("12/7/2018")
       "Thursday"
 
@@ -125,16 +250,15 @@ defmodule Datex.Date do
       "Sunday"
 
   """
-
   def day(date) do
     @days[day_of_week(date)]
   end
 
   @doc """
-  Returns shory name of day as `String` for a particular date in any format. 
+  Returns shory name of day as `String` for a particular date in any format.
 
-  For example date formats like `DD-MM-YYYY`, `10th Oct, 2019`, `YYYY-MM-DD`, 
-  `DD/MM/YYYY`, `DD.MM.YYYY` or even elixir dates. 
+  For example date formats like `DD-MM-YYYY`, `10th Oct, 2019`, `YYYY-MM-DD`,
+  `DD/MM/YYYY`, `DD.MM.YYYY` or even elixir dates.
 
   ## Examples
 
@@ -142,13 +266,12 @@ defmodule Datex.Date do
       "Tue"
 
   """
-
   def day_short(date) do
     @days_short_name[day_of_week(date)]
   end
 
   @doc """
-  Get day of week as `Integer` for a particular date in any format. `Monday` is `1` and `Sunday` as `7`. 
+  Get day of week as `Integer` for a particular date in any format. `Monday` is `1` and `Sunday` as `7`.
 
   ## Examples
 
@@ -156,14 +279,13 @@ defmodule Datex.Date do
       6
 
   """
-
   def day_of_week(date) do
     date = check_date(date)
     Date.day_of_week(date)
   end
 
   @doc """
-  Get number of days in a month as `Integer` for a particular date in any format. 
+  Get number of days in a month as `Integer` for a particular date in any format.
 
   ## Examples
 
@@ -171,14 +293,13 @@ defmodule Datex.Date do
       30
 
   """
-
   def days_in_month(date) do
     date = check_date(date)
     Date.days_in_month(date)
   end
 
   @doc """
-  Get month name as `String` for a particular date in any format. 
+  Get month name as `String` for a particular date in any format.
 
   ## Examples
 
@@ -186,14 +307,13 @@ defmodule Datex.Date do
       "September"
 
   """
-
   def month(date) do
     date = check_date(date)
     month_name(date.month)
   end
 
   @doc """
-  Get year as `Integer` for a particular date in any format. 
+  Get year as `Integer` for a particular date in any format.
 
   ## Examples
 
@@ -201,19 +321,18 @@ defmodule Datex.Date do
       2030
 
   """
-
   def year(date) do
     date = check_date(date)
     date.year
   end
 
   @doc """
-  Add days to date. 
+  Add days to date.
 
   It takes 2 arguments and an optional 3rd argument. First argument is `Date` in elixir date format or standard date as `String`, second is `number of days`.
-  Third argument is format like `:nice_date`, `:elixir`, `:nice_short_date`. 
+  Third argument is format like `:nice_date`, `:elixir`, `:nice_short_date`.
 
-  It returns date in formats specified in `today()` function. 
+  It returns date in formats specified in `today()` function.
 
   ## Examples
 
@@ -227,7 +346,6 @@ defmodule Datex.Date do
       "25 Oct, 2018"
 
   """
-
   def add(date, days, format \\ :nice_date) do
     date
     |> check_date
@@ -236,10 +354,10 @@ defmodule Datex.Date do
   end
 
   @doc """
-  Get difference between two dates as `Integer`. 
+  Get difference between two dates as `Integer`.
 
-  It takes 2 different dates as arguments. You can specify 2 dates in different format as well. 
-  Other than `elixir_date` format remaining formats should be `string`.   
+  It takes 2 different dates as arguments. You can specify 2 dates in different format as well.
+  Other than `elixir_date` format remaining formats should be `string`.
 
   ## Examples
 
@@ -248,9 +366,8 @@ defmodule Datex.Date do
 
       iex(2)> Datex.Date.difference(~D[2018-11-25], "10-10-2018")
       46
-      
-  """
 
+  """
   def difference(date1, date2) do
     dat1 = check_date(date1)
     dat2 = check_date(date2)
@@ -258,10 +375,10 @@ defmodule Datex.Date do
   end
 
   @doc """
-  Get the range between two dates as `DateRange`. 
+  Get the range between two dates as `DateRange`.
 
-  It takes 2 different dates as arguments. You can specify 2 dates in different format as well. 
-  Other than `elixir_date` format remaining formats should be `string`.   
+  It takes 2 different dates as arguments. You can specify 2 dates in different format as well.
+  Other than `elixir_date` format remaining formats should be `string`.
 
   ## Examples
 
@@ -270,9 +387,8 @@ defmodule Datex.Date do
 
       iex(2)> Datex.Date.range(~D[2018-10-17], "12 Dec 2019")
       #DateRange<~D[2018-10-17], ~D[2019-12-12]>
-      
-  """
 
+  """
   def range(date1, date2) do
     dat1 = check_date(date1)
     dat2 = check_date(date2)
@@ -280,10 +396,10 @@ defmodule Datex.Date do
   end
 
   @doc """
-  It checks whether a particular `date` falls inside a `DateRange`. 
+  It checks whether a particular `date` falls inside a `DateRange`.
 
-  It takes 2 arguments. First is a `DateRange` and second is `date`.  
-  It returns boolean either `true` or `false`. You can iterate over `DateRange` for other date functionalities. 
+  It takes 2 arguments. First is a `DateRange` and second is `date`.
+  It returns boolean either `true` or `false`. You can iterate over `DateRange` for other date functionalities.
 
   ## Examples
 
@@ -300,30 +416,29 @@ defmodule Datex.Date do
        ~D[2018-10-22], ~D[2018-10-23], ~D[2018-10-24], ~D[2018-10-25], ~D[2018-10-26],
        ~D[2018-10-27], ~D[2018-10-28], ~D[2018-10-29], ~D[2018-10-30], ~D[2018-10-31],
        ...]
-      
-  """
 
+  """
   def date_in_range(range, date) do
     date = check_date(date)
     Enum.member?(range, date)
   end
 
   @doc """
-  It produces an array of dates in formats you want. 
+  It produces an array of dates in formats you want.
 
   It takes 2 arguments. First is a `DateRange` and second is `format` which is optional and gives elixir date by default.
-  Formats are specified in `format_date()`  
+  Formats are specified in `format_date()`
   It returns an array of dates in the given format.
 
   ## Examples
-      
+
       range = Datex.Date.range("10 sept, 2018", "20 sept, 2018")
       iex()> Datex.Date.date_list(range, "DD-MM-YYYY")
       ["10-09-2018", "11-09-2018", "12-09-2018", "13-09-2018", "14-09-2018",
       "15-09-2018", "16-09-2018", "17-09-2018", "18-09-2018", "19-09-2018",
       "20-09-2018"]
 
-      iex()> Datex.Date.date_list(range, "DAY_SHORT, DATE MONTH_NAME_SHORT")      
+      iex()> Datex.Date.date_list(range, "DAY_SHORT, DATE MONTH_NAME_SHORT")
       ["Mon, 10 Sept", "Tue, 11 Sept", "Wed, 12 Sept", "Thu, 13 Sept",
       "Fri, 14 Sept", "Sat, 15 Sept", "Sun, 16 Sept", "Mon, 17 Sept",
       "Tue, 18 Sept", "Wed, 19 Sept", "Thu, 20 Sept"]
@@ -331,9 +446,8 @@ defmodule Datex.Date do
       iex()> Datex.Date.date_list(range)
       [~D[2018-09-10], ~D[2018-09-11], ~D[2018-09-12], ~D[2018-09-13],
       ~D[2018-09-14], ~D[2018-09-15]]
-      
-  """  
 
+  """
   def date_list(range, format \\ "elixir") do
     for date <- range do
       format_date(date, format)
@@ -343,13 +457,13 @@ defmodule Datex.Date do
   @doc """
   Change given `date` to a specific date format.
 
-  It takes 2 arguments. First is a `Date` and second is `format` as `String` you want to convert to. 
+  It takes 2 arguments. First is a `Date` and second is `format` as `String` you want to convert to.
   It returns `date` in required format.
 
-  Valid formats are: 
+  Valid formats are:
 
   `DD-MM-YYYY`
-  
+
   `YYYY-MM-DD`
 
   `DD-MM-YY`
@@ -384,11 +498,6 @@ defmodule Datex.Date do
 
   `DAY_SHORT, DATE MONTH_NAME_SHORT`
 
-
-
-
-
-
   ## Examples
 
       iex()> Datex.Date.format_date("10 Feb, 2017", "YYYY/MM/DD")
@@ -402,44 +511,41 @@ defmodule Datex.Date do
 
       iex()> Datex.Date.format_date(~D[2019-02-10], "DAY_SHORT, DATE MONTH_NAME_SHORT")
       "Sun, 10 Feb"
-      
+
   """
-
   def format_date(date, format) do
-
     elixir_date = check_date(date)
     day = day(date)
     day_short = day_short(date)
     {dat, month, year} = {elixir_date.day, elixir_date.month, elixir_date.year}
     [_, _ | last_two] = Integer.digits(year)
-    
-    case format do
 
-      "DD-MM-YYYY" -> 
+    case format do
+      "DD-MM-YYYY" ->
         "#{dat}-#{format_month(month)}-#{year}"
 
-      "YYYY-MM-DD" -> 
+      "YYYY-MM-DD" ->
         "#{year}-#{format_month(month)}-#{dat}"
 
-      "DD-MM-YY" -> 
+      "DD-MM-YY" ->
         "#{dat}-#{format_month(month)}-#{Integer.undigits(last_two)}"
 
-      "DD/MM/YYYY" -> 
+      "DD/MM/YYYY" ->
         "#{dat}/#{format_month(month)}/#{year}"
 
-      "YYYY/MM/DD" -> 
+      "YYYY/MM/DD" ->
         "#{year}/#{format_month(month)}/#{dat}"
 
-      "DD/MM/YY" -> 
+      "DD/MM/YY" ->
         "#{dat}/#{format_month(month)}/#{Integer.undigits(last_two)}"
 
-      "DD.MM.YYYY" -> 
+      "DD.MM.YYYY" ->
         "#{dat}.#{format_month(month)}.#{year}"
 
-      "YYYY.MM.DD" -> 
+      "YYYY.MM.DD" ->
         "#{year}.#{format_month(month)}.#{dat}"
 
-      "DD.MM.YY" -> 
+      "DD.MM.YY" ->
         "#{dat}.#{format_month(month)}.#{Integer.undigits(last_two)}"
 
       "DATE MONTH_NAME_FULL YYYY" ->
@@ -469,20 +575,21 @@ defmodule Datex.Date do
       "DAY_SHORT, DATE MONTH_NAME_SHORT" ->
         "#{day_short}, #{dat} #{@months_short_name[month]}"
 
-      "elixir" -> elixir_date
+      "elixir" ->
+        elixir_date
 
-      _ -> "Unspecified Format"
-
+      _ ->
+        "Unspecified Format"
     end
   end
 
   @doc """
-  It compares 2 `dates` and provides us human friendly results like `2 days later` or `6 months ago`. 
+  It compares 2 `dates` and provides us human friendly results like `2 days later` or `6 months ago`.
 
-  It takes 2 arguments. First is a `date` and second is also a `date` defaulted to `today`. 
-  It returns friendly result as `string` 
-  
-  `compare/1` will compare the given `date` from today itself. You can even pass second argument as `date` to compare with. 
+  It takes 2 arguments. First is a `date` and second is also a `date` defaulted to `today`.
+  It returns friendly result as `string`
+
+  `compare/1` will compare the given `date` from today itself. You can even pass second argument as `date` to compare with.
 
   ## Examples
 
@@ -497,105 +604,374 @@ defmodule Datex.Date do
 
       iex(10)> Datex.Date.compare("15 aug 2018", ~D[2018-08-06])
       "a week and 2 days later"
-      
-  """
 
+  """
   def compare(date1, date2 \\ today()) do
     diff = difference(date1, date2)
+
     cond do
-      diff >= 0 -> 
+      diff >= 0 ->
         cond do
-          diff == 0 -> "Same Day"
-          diff == 1 -> "1 Day later"
-          diff < 7 -> "#{diff} days later"
-          diff == 7 -> "1 week later"
+          diff == 0 ->
+            "Same Day"
+
+          diff == 1 ->
+            "1 Day later"
+
+          diff < 7 ->
+            "#{diff} days later"
+
+          diff == 7 ->
+            "1 week later"
+
           diff > 7 && diff < 30 ->
             week = div(diff, 7)
-            days = rem(diff,  7)
+            days = rem(diff, 7)
+
             cond do
-              days == 1 && week == 1 ->  
+              days == 1 && week == 1 ->
                 "a week and #{days} day later"
+
               days > 0 and week == 1 ->
                 "a week and #{days} days later"
+
               week >= 2 ->
                 "#{week} weeks later"
             end
+
           diff > 30 && diff < 60 ->
             days = rem(diff, 30)
+
             cond do
               days == 0 -> "a month later"
               days == 1 -> "a month and 1 day later"
               days > 1 -> "a month and #{days} days later"
             end
-          diff >=60 && diff < 365 ->
+
+          diff >= 60 && diff < 365 ->
             months = div(diff, 30)
             "#{months} months later"
-          diff > 365 && diff < 730 -> 
+
+          diff > 365 && diff < 730 ->
             months = rem(diff, 365) |> div(30)
+
             cond do
               months == 0 -> "a year later"
               months == 1 -> "a year and a month later"
               months > 1 -> "a year and #{months} months later"
             end
-          diff >= 730 -> 
+
+          diff >= 730 ->
             year = div(diff, 365)
             "#{year} years later"
         end
+
       diff < 0 ->
         diff = abs(diff)
+
         cond do
-          diff == 1 -> "1 Day ago"
-          diff < 7 -> "#{diff} days ago"
-          diff == 7 -> "1 week ago"
+          diff == 1 ->
+            "1 Day ago"
+
+          diff < 7 ->
+            "#{diff} days ago"
+
+          diff == 7 ->
+            "1 week ago"
+
           diff > 7 && diff < 30 ->
             week = div(diff, 7)
-            days = rem(diff,  7)
+            days = rem(diff, 7)
+
             cond do
-              days == 1 && week == 1 ->  
+              days == 1 && week == 1 ->
                 "a week and #{days} day ago"
+
               days > 0 and week == 1 ->
                 "a week and #{days} days ago"
+
               week >= 2 ->
                 "#{week} weeks ago"
             end
+
           diff > 30 && diff < 60 ->
             days = rem(diff, 30)
+
             cond do
               days == 0 -> "a month ago"
               days == 1 -> "a month and 1 day ago"
               days > 1 -> "a month and #{days} days ago"
             end
-          diff >=60 && diff < 365 ->
+
+          diff >= 60 && diff < 365 ->
             months = div(diff, 30)
             "#{months} months ago"
-          diff > 365 && diff < 730 -> 
+
+          diff > 365 && diff < 730 ->
             months = rem(diff, 365) |> div(30)
+
             cond do
               months == 0 -> "a year later"
               months == 1 -> "a year and a month ago"
               months > 1 -> "a year and #{months} months ago"
             end
-          diff >= 730 -> 
+
+          diff >= 730 ->
             year = div(diff, 365)
             "#{year} years ago"
         end
     end
   end
 
+  @doc """
+  Returns true if the given date is a Saturday or Sunday.
+
+  ## Examples
+
+      iex> Datex.Date.is_weekend?("15 Sept, 2018")
+      true
+
+      iex> Datex.Date.is_weekend?("14 Sept, 2018")
+      false
+
+  """
+  def is_weekend?(date) do
+    day = day_of_week(date)
+    day == 6 or day == 7
+  end
+
+  @doc """
+  Returns true if the year of the given date is a leap year.
+
+  ## Examples
+
+      iex> Datex.Date.is_leap_year?("29 Feb, 2020")
+      true
+
+      iex> Datex.Date.is_leap_year?("29 Feb, 2021")
+      false
+
+  """
+  def is_leap_year?(date) do
+    year = year(date)
+    rem(year, 4) == 0 and (rem(year, 100) != 0 or rem(year, 400) == 0)
+  end
+
+  @doc """
+  Returns the first date of the month for the given date.
+
+  ## Examples
+
+      iex> Datex.Date.beginning_of_month("15 Sept, 2018")
+      ~D[2018-09-01]
+
+      iex> Datex.Date.beginning_of_month("1 Jan, 2020")
+      ~D[2020-01-01]
+
+  """
+  def beginning_of_month(date) do
+    d = check_date(date)
+    %{d | day: 1}
+  end
+
+  @doc """
+  Returns the last date of the month for the given date.
+
+  ## Examples
+
+      iex> Datex.Date.end_of_month("15 Sept, 2018")
+      ~D[2018-09-30]
+
+      iex> Datex.Date.end_of_month("1 Feb, 2020")
+      ~D[2020-02-29]
+
+  """
+  def end_of_month(date) do
+    d = check_date(date)
+    %{d | day: Date.days_in_month(d)}
+  end
+
+  @doc """
+  Returns the next date for the given weekday after the given date.
+  Weekday can be a number (1-7), full day name, or short day name.
+  Numbers: 1 (Monday) through 7 (Sunday)
+  Names: "Monday", "Mon", "monday", "mon", etc.
+  If no date is provided, defaults to today.
+  Optional format parameter: :elixir, :nice_date, :nice_short_date
+
+  ## Examples
+
+      iex> Datex.Date.next_weekday("Friday")
+      ~D[2018-09-21]
+
+      iex> Datex.Date.next_weekday("15 Sept, 2018", "Mon")
+      ~D[2018-09-17]
+
+      iex> Datex.Date.next_weekday("15 Sept, 2018", "Friday", :nice_date)
+      "21 September, 2018"
+
+      iex> Datex.Date.next_weekday("15 Sept, 2018", 5)
+      ~D[2018-09-21]
+
+  """
+  def next_weekday(weekday) do
+    next_weekday(Date.utc_today(), weekday, :elixir)
+  end
+
+  def next_weekday(date, weekday) do
+    next_weekday(date, weekday, :elixir)
+  end
+
+  def next_weekday(date, weekday, format) when is_integer(weekday) and weekday in 1..7 do
+    d = check_date(date)
+    days_ahead = rem(weekday - Date.day_of_week(d) + 7, 7)
+    days_ahead = if days_ahead == 0, do: 7, else: days_ahead
+
+    Date.add(d, days_ahead)
+    |> show_date(format)
+  end
+
+  def next_weekday(date, weekday, format) when is_binary(weekday) do
+    case day_number(weekday) do
+      nil -> "Invalid weekday name"
+      day_num -> next_weekday(date, day_num, format)
+    end
+  end
+
+  @doc """
+  Returns the ISO week number for the given date.
+
+  ## Examples
+
+      iex> Datex.Date.week_number("1 Jan, 2018")
+      1
+
+      iex> Datex.Date.week_number("31 Dec, 2018")
+      1
+
+  """
+  def week_number(date) do
+    d = check_date(date)
+    {week, _year} = :calendar.iso_week_number({d.year, d.month, d.day})
+    week
+  end
+
+  @doc """
+  Returns the quarter (1-4) for the given date.
+
+  ## Examples
+
+      iex> Datex.Date.quarter("15 Jan, 2018")
+      1
+
+      iex> Datex.Date.quarter("15 Apr, 2018")
+      2
+
+      iex> Datex.Date.quarter("15 Jul, 2018")
+      3
+
+      iex> Datex.Date.quarter("15 Oct, 2018")
+      4
+
+  """
+  def quarter(date) do
+    d = check_date(date)
+    div(d.month - 1, 3) + 1
+  end
+
+  @doc """
+  Returns the number of business days (Monday-Friday) between two dates.
+
+  ## Examples
+
+      iex> Datex.Date.business_days_between("1 Jan, 2018", "5 Jan, 2018")
+      5
+
+      iex> Datex.Date.business_days_between("1 Jan, 2018", "7 Jan, 2018")
+      5
+
+  """
+  def business_days_between(date1, date2) do
+    range = Date.range(check_date(date1), check_date(date2))
+    Enum.count(range, fn d -> day_of_week(d) in 1..5 end)
+  end
+
+  @doc """
+  Returns the nth occurrence of a specific weekday in a given month and year.
+  Weekday can be a number (1-7), full day name, or short day name.
+  Numbers: 1 (Monday) through 7 (Sunday)
+  Names: "Monday", "Mon", "monday", "mon", etc.
+  n can be 1-5 (1st, 2nd, 3rd, 4th, 5th occurrence)
+  Optional format parameter: :elixir, :nice_date, :nice_short_date
+
+  ## Examples
+
+      iex> Datex.Date.nth_weekday_of_month(3, "Monday", "November", 2028)
+      ~D[2028-11-20]
+
+      iex> Datex.Date.nth_weekday_of_month(2, "Tuesday", "Jan", 2030, :nice_date)
+      "8 January, 2030"
+
+      iex> Datex.Date.nth_weekday_of_month(1, 5, 12, 2024)  # 1st Friday of December 2024
+      ~D[2024-12-06]
+
+  """
+  def nth_weekday_of_month(n, weekday, month, year) do
+    nth_weekday_of_month(n, weekday, month, year, :elixir)
+  end
+
+  def nth_weekday_of_month(n, weekday, month, year, format)
+      when is_binary(weekday) and is_binary(month) do
+    case {day_number(weekday), month_number(month)} do
+      {nil, _} -> "Invalid weekday name"
+      {_, nil} -> "Invalid month name"
+      {day_num, month_num} -> nth_weekday_of_month(n, day_num, month_num, year, format)
+    end
+  end
+
+  def nth_weekday_of_month(n, weekday, month, year, format)
+      when is_integer(weekday) and is_integer(month) and n in 1..5 do
+    # Get the first day of the month
+    first_day = Date.new!(year, month, 1)
+
+    # Calculate the first occurrence of the target weekday
+    first_weekday = Date.day_of_week(first_day)
+    days_to_add = rem(weekday - first_weekday + 7, 7)
+    days_to_add = if days_to_add == 0, do: 7, else: days_to_add
+
+    # Add weeks to get to the nth occurrence
+    target_date = Date.add(first_day, days_to_add - 1 + (n - 1) * 7)
+
+    # Check if the target date is still in the same month
+    if target_date.month == month do
+      show_date(target_date, format)
+    else
+      "No #{n}#{ordinal_suffix(n)} #{day_name(weekday)} in #{month_name(month)} #{year}"
+    end
+  end
+
+  def nth_weekday_of_month(_n, _weekday, _month, _year, _format) do
+    "Invalid Input"
+  end
+
+  # ============================================================================
+  # PRIVATE FUNCTIONS
+  # ============================================================================
+
   defp check_date(date) do
     cond do
-      String.valid?(date) ->
+      is_binary(date) and String.valid?(date) ->
         convert_to_elixir_date(date)
-      String.valid?(date) == false && date.year >= 0 ->
+
+      is_map(date) and Map.has_key?(date, :year) and date.year >= 0 ->
         date
+
       true ->
         "Invalid Date format"
     end
   end
 
-
   defp convert_to_elixir_date(date) do
-
     cond do
       String.match?(date, ~r/-/) ->
         parse_slaced_date(date)
@@ -627,32 +1003,35 @@ defmodule Datex.Date do
   end
 
   defp parse_string_date(date) do
-
     case String.trim(date) |> String.split([" ", ", ", ","]) do
       [one, two, three] ->
-
         cond do
-          parse_day(one) in 1..31 && month_number(two) && String.length(three) === 4 && parse_day(three) ->
+          parse_day(one) in 1..31 && month_number(two) && String.length(three) === 4 &&
+              parse_day(three) ->
             new_date(parse_day(three), month_number(two), parse_day(one))
 
-          parse_day(two) in 1..31 && month_number(one) && String.length(three) === 4 && parse_day(three) ->
+          parse_day(two) in 1..31 && month_number(one) && String.length(three) === 4 &&
+              parse_day(three) ->
             new_date(parse_day(three), month_number(one), parse_day(two))
 
-          parse_day(two) in 1..31 && month_number(three) && String.length(one) === 4 && parse_day(one) ->
+          parse_day(two) in 1..31 && month_number(three) && String.length(one) === 4 &&
+              parse_day(one) ->
             new_date(parse_day(one), month_number(three), parse_day(two))
 
-          parse_day(three) in 1..31 && month_number(two) && String.length(one) === 4 && parse_day(one) ->
+          parse_day(three) in 1..31 && month_number(two) && String.length(one) === 4 &&
+              parse_day(one) ->
             new_date(parse_day(one), month_number(two), parse_day(three))
 
-          true -> 
+          true ->
             "Invalid Date Format"
         end
-      _ -> "Invalid Date Format"
+
+      _ ->
+        "Invalid Date Format"
     end
   end
 
   defp parse_date(date) do
-
     case date do
       [day, month, year] when year > 0 and day in 1..31 and month in 1..12 ->
         new_date(year, month, day)
@@ -662,7 +1041,7 @@ defmodule Datex.Date do
 
       [month, day, year] when year > 0 and day in 1..31 and month in 1..12 ->
         new_date(year, month, day)
-        
+
       _ ->
         "Invalid Date Format"
     end
@@ -686,7 +1065,8 @@ defmodule Datex.Date do
     cond do
       number < 10 ->
         "0#{number}"
-      true -> 
+
+      true ->
         number
     end
   end
@@ -713,7 +1093,11 @@ defmodule Datex.Date do
     @months_short_name[number]
   end
 
-  defp show_date(date, format \\ :nice_date) do
+  defp day_number(name) do
+    @days_number[name]
+  end
+
+  defp show_date(date, format) do
     case format do
       :elixir -> date
       :nice_date -> date |> nice_date
@@ -732,4 +1116,16 @@ defmodule Datex.Date do
     "#{day} #{month_short_name(month)}, #{year}"
   end
 
+  defp ordinal_suffix(n) do
+    case n do
+      1 -> "st"
+      2 -> "nd"
+      3 -> "rd"
+      _ -> "th"
+    end
+  end
+
+  defp day_name(weekday) do
+    @days[weekday]
+  end
 end
