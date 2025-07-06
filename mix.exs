@@ -4,7 +4,7 @@ defmodule Datex.MixProject do
   def project do
     [
       app: :datex,
-      version: "2.1.0",
+      version: "2.0.0",
       elixir: ">= 1.14.0",
       start_permanent: Mix.env() == :prod,
       package: package(),
@@ -22,20 +22,11 @@ defmodule Datex.MixProject do
 
   defp description do
     """
-    Human readable simple date and time library.
+    Human readable date and time library with flexible parsing and formatting.
 
-    It works with standard date and time as well as elixir date, time formats.
-
-    You can get a specific day, date, add days to date and get results which are friendly and easy to understand.
-
-    New features include:
-    - Business day calculations
-    - Weekday and month utilities (is_weekend?, is_leap_year?, beginning_of_month, end_of_month)
-    - Next weekday and nth weekday of month functions
-    - Time range generation and timezone conversion
-    - Time validation and period detection
-    - Quarter and week number calculations
-
+    Supports standard date/time formats and Elixir formats. Features include:
+    business day calculations, weekday utilities, time ranges, timezone conversion,
+    and friendly human-readable outputs.
     """
   end
 
